@@ -61,7 +61,7 @@ object wordCount_CLDD {
 
 
       //set up spark configuration
-      val sparkConf = new SparkConf().setMaster("local[1]")
+      val sparkConf = new SparkConf().setMaster("local[6]")
       sparkConf.setAppName("WordCount_CLDD")
         .set("spark.executor.memory", "2g")
 
@@ -101,7 +101,7 @@ object wordCount_CLDD {
       logger.log(Level.INFO, "Record Lineage time starts at " + LineageStartTimestamp)
 
       //spark program starts here
-      val lines = lc.textFile("/Users/Michael/Documents/lambdadelta/angular-seed/README.md", 1)
+      val lines = lc.textFile("/Users/Michael/Desktop/wordCounts.data", 1)
       val wordCount = lines.flatMap(line => line.trim().replaceAll(" +", " ").split(" "))
         .map(word => (word.substring(0, 1), word.length))
         //.reduceByKey(_ + _) //Use groupByKey to avoid combiners
@@ -138,7 +138,7 @@ object wordCount_CLDD {
       }
 
 
-
+/*
 //      val pw = new PrintWriter(new File("/Users/Michael/IdeaProjects/WordCount_CLDD/lineageResult"))
 
       //get the list of lineage id
@@ -189,7 +189,8 @@ object wordCount_CLDD {
         ((content.substring(0, index2), content.substring(index2 + 1).toInt), lineageID.toLong)
       })
 
-      println("MappedRDD has " + mappedRDD.count() + " records")
+      mappedRDD.cache()
+//      println("MappedRDD has " + mappedRDD.count() + " records")
 
 
 
@@ -227,11 +228,11 @@ object wordCount_CLDD {
         val returnedRDD = delta_debug.ddgen(mappedRDD, new Test, new Split, lm, fh)
 //      }
       val ss = returnedRDD.collect
-      println("**************")
-      for (a <- ss){
-        println(a._1 + " && " + a._2)
-      }
-      println("**************")
+//      println("**************")
+//      for (a <- ss){
+//        println(a._1 + " && " + a._2)
+//      }
+//      println("**************")
      // linRdd.collect.foreach(println)
       linRdd = wordCount.getLineage()
       linRdd.collect
@@ -249,7 +250,7 @@ object wordCount_CLDD {
       val DeltaDebuggingEndTimestamp = new java.sql.Timestamp(Calendar.getInstance.getTime.getTime)
       logger.log(Level.INFO, "DeltaDebugging (unadjusted) ends at " + DeltaDebuggingEndTimestamp)
       logger.log(Level.INFO, "DeltaDebugging (unadjusted) takes " + (DeltaDebuggingEndTime - DeltaDebuggingStartTime) / 1000 + " milliseconds")
-
+*/
       println("Job's DONE!")
       ctx.stop()
     }

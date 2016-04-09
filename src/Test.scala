@@ -21,7 +21,7 @@ import org.apache.spark.delta.DeltaWorkflowManager
 
 class Test extends userTest[(String, Int)] with Serializable {
 
-  def usrTest(inputRDD: RDD[(String, Int)], lm: LogManager, fh: FileHandler): Boolean = {
+  def usrTest(inputRDD: RDD[(String, Int)], lm: LogManager, fh: FileHandler): (Boolean, List[(String, Int)]) = {
     //use the same logger as the object file
     val logger: Logger = Logger.getLogger(classOf[Test].getName)
     lm.addLogger(logger)
@@ -29,6 +29,7 @@ class Test extends userTest[(String, Int)] with Serializable {
 
     //assume that test will pass (which returns false)
     var returnValue = false
+    var list : List[(String, Int)] = List()
 
     /*The rest of the code are for correctness test
     val spw = new sparkOperations()
@@ -78,15 +79,14 @@ class Test extends userTest[(String, Int)] with Serializable {
     outputFile.delete
     */
 
-    /* use deltaworkflowmanager instead
+    // use deltaworkflowmanager instead
     val resultRDD = inputRDD.groupByKey()
         .map(pair => {
           val itr = pair._2.toIterator
           var returnedValue = 0
           var size = 0
           while (itr.hasNext) {
-            val num = itr.next()
-            returnedValue += num
+            returnedValue += itr.next.asInstanceOf[(Int, Long)]._1
             size += 1
           }
           (pair._1, returnedValue/size)
@@ -101,7 +101,19 @@ class Test extends userTest[(String, Int)] with Serializable {
         })
 
     val out = resultRDD.collect()
-    */
+    for (o <- out) {
+      println(o)
+      val key = o.asInstanceOf[(String, String)]._1
+      var value = o.asInstanceOf[(String, String)]._2
+      if (value.substring(value.length - 1).equals("*")) {
+        list = (key, value.substring(0, value.length - 1).toInt) :: list
+        returnValue = true
+      } else list = (key, value.toInt) :: list
+    }
+    return (returnValue, list)
+    //
+
+    /*Use delta workflow instead of recalculation
     inputRDD.collect().foreach(println)
     val finalRdd = DeltaWorkflowManager.generateNewWorkFlow(inputRDD)
     val out = finalRdd.collect()
@@ -110,5 +122,6 @@ class Test extends userTest[(String, Int)] with Serializable {
       if (o.asInstanceOf[(String, String)]._2.substring(o.asInstanceOf[(String, String)]._2.length - 1).equals("*")) returnValue = true
     }
     return returnValue
+    */
   }
 }

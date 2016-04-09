@@ -12,5 +12,5 @@ import scala.collection.JavaConversions._
 
 trait userTest[T] {
 
-  def usrTest(inputRDD: RDD[T], lm: LogManager, fh: FileHandler): Boolean
+  def usrTest(inputRDD: RDD[T], lm: LogManager, fh: FileHandler): (Boolean, List[(String, Int)])
 }

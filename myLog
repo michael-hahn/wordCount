@@ -1,10 +1,2 @@
-Mar 28, 2016 3:56:17 PM wordCount_CLDD$ main
-INFO: Record Lineage time starts at 2016-03-28 15:56:17.072
-Mar 28, 2016 3:56:18 PM wordCount_CLDD$ main
-INFO: Lineage takes 1899795 microseconds
-Mar 28, 2016 3:56:18 PM wordCount_CLDD$ main
-INFO: Lineage ends at 2016-03-28 15:56:18.972
-Mar 28, 2016 3:56:19 PM wordCount_CLDD$ main
-INFO: Record DeltaDebugging (unadjusted) time starts at 2016-03-28 15:56:19.46
-Mar 28, 2016 3:56:19 PM DD_NonEx dd_helper
-INFO: Running DD_NonEx SCALA
+Apr 08, 2016 3:40:09 PM wordCount_CLDD$ main
+INFO: Record Lineage time starts at 2016-04-08 15:40:09.887
